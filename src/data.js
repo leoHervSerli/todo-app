@@ -58,7 +58,7 @@ export const data = [
     {
         id: 8,
         titre: 'TodoApp.css',
-        description: 'Ajouter du style dans TodoApp.css\nfcfvhgfjvuyt',
+        description: 'Ajouter du style dans TodoApp.css',
         etat: 3,
         date: '2023-04-17',
     }];
