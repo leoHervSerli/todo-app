@@ -2,7 +2,8 @@ import {useRef, useState} from "react";
 
 export default function TodoForm({allTodoData, setAllTodoData, nextId, setNextId, correctDateFormat})
 {
-    /*
+    /* A ne pas faire re update à chaque nouvelle lettre.
+
     //=== UseState pour le titre et la description d'une tache ===//
     const [titre, setTitre] = useState('');
     const [description, setDescription] = useState('');
@@ -19,9 +20,9 @@ export default function TodoForm({allTodoData, setAllTodoData, nextId, setNextId
     }
     */
 
+    // UseRef : à faire pour les forms.
     const inputTitre = useRef(null);
     const inputDescription = useRef(null);
-
 
     // Ajoute la tache à la liste de tache si il y a un titre et une description.
     function handleSubmit(event)
@@ -42,9 +43,7 @@ export default function TodoForm({allTodoData, setAllTodoData, nextId, setNextId
                 };
             setNextId(nextId + 1);
             // setAllTodoData([...allTodoData, newTodo]);
-            setAllTodoData((oldList) =>
-                [...oldList, newTodo]
-            );
+            setAllTodoData((oldList) => [...oldList, newTodo]);
         }
     }
 
@@ -57,11 +56,13 @@ export default function TodoForm({allTodoData, setAllTodoData, nextId, setNextId
                         <div className='titre'>
                             <input type="text" name="titre" placeholder='Titre' size="25"
                                    ref={inputTitre}/>
+                            {/*value={description} onChange={handleDescription}*/}
                         </div>
 
                         <div className='description'>
                             <textarea name="description" placeholder='Description' rows="5" cols="25"
                                       ref={inputDescription} ></textarea>
+                            {/*value={titre} onChange={handleTitre}*/}
                         </div>
 
                         <input type='submit' value='Créer'/>

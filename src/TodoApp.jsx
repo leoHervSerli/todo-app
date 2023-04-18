@@ -26,7 +26,7 @@ export default function TodoApp()
     // Filtre allTodoData selon le filtre d'etats et de date.
     const todoDataFlitred = allTodoData.filter(elem =>
         ((elem.etat === 1 && etats.etat1) || (elem.etat === 2 && etats.etat2) || (elem.etat === 3 && etats.etat3)) &&
-        dateIsBewtten(elem.date)
+        dateIsBetween(elem.date)
     );
 
     //=== Les nombres des differentes taches avec les etats 1, 2 et 3 ===//
@@ -45,7 +45,7 @@ export default function TodoApp()
     //=========================================//
 
     // Pour savoir si une date est entre nos deux dates (filtre date).
-    function dateIsBewtten(date)
+    function dateIsBetween(date)
     {
         const firstDate = new Date(dates.firstDate);
         const lastDate = new Date(dates.lastDate);

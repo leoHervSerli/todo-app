@@ -1,6 +1,8 @@
 import {InboxIcon , SyncIcon, CheckIcon } from '@primer/octicons-react'
 export default function TodoList({data, changeEtat})
 {
+    // Old version, dangerouslySetInnerHTML à eviter.
+
     // Pour avoir la description avec les sauts de lignes.
     // const description = data.description.replaceAll('\n', '<br/>');
 
