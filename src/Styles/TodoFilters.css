@@ -1,0 +1,14 @@
+.todoFilters{
+    height: 30%;
+    border: 2px solid black;
+    box-sizing: border-box;
+}
+
+.allFilters{
+    display: flex;
+    justify-content: space-around;
+}
+
+.selectDates{
+    display: flex;
+}

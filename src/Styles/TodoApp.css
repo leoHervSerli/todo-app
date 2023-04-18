@@ -1,0 +1,23 @@
+html, body, #root, .todoApp{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.todoApp{
+    display: flex;
+}
+
+.leftTodoApp{
+    width: 30%;
+}
+
+.rightTodoApp{
+    width: 70%;
+}
+
+h1{
+    text-align: center;
+    margin: 2%;
+}
