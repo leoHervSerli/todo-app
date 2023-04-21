@@ -2,8 +2,8 @@ import TodoForm from "./TodoForm";
 import TodoStats from "./TodoStats";
 import TodoFilters from "./TodoFilters";
 import TodoList from "./TodoList";
-import {data} from "./data";
-import {useState} from "react";
+//import {data} from "./data";
+import {useState, useEffect} from "react";
 
 export default function TodoApp()
 {
@@ -12,7 +12,8 @@ export default function TodoApp()
     //=========================================//
 
     // Toutes les taches.
-    const [allTodoData, setAllTodoData] = useState(data);
+    const [allTodoData, setAllTodoData] = useState([]);/*data*/
+
     // L'id pour la prochaine tache.
     const [nextId, setNextId] = useState(allTodoData.length + 1);
     // Les etats pour le filtre des etats.
@@ -43,6 +44,38 @@ export default function TodoApp()
     //=========================================//
     //=== Fonctions
     //=========================================//
+
+    /*
+    useEffect(() =>
+    {
+        fetch("http://localhost:5000/data")
+            .then(response => response.json())
+            .then((usefulData) => {
+                console.log(usefulData);
+                setAllTodoData(usefulData);
+            })
+            .catch((e) => {
+                console.error(`An error occurred: ${e}`)
+            });
+        return () => setAllTodoData([]);
+    }, []);
+    */
+
+    useEffect(() =>
+    {
+        async function getDataFormServer()
+        {
+            const response = await fetch("/data");
+            const data = await response.json();
+            console.log(data);
+            setAllTodoData(data);
+        }
+        getDataFormServer();
+        return () => setAllTodoData([]);
+    }, []);
+
+
+
 
     // Pour savoir si une date est entre nos deux dates (filtre date).
     function dateIsBetween(date)

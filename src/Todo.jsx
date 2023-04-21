@@ -24,19 +24,22 @@ export default function TodoList({data, changeEtat})
     //
     // }
 
-    const displayEtat = (etat) => etat === 1 ? <InboxIcon size={50} /> : (etat === 2 ? <SyncIcon size={50} /> : <CheckIcon size={50} />);
+    const obj = {1: <InboxIcon size={50} />, 2: <SyncIcon size={50} />, 3:  <CheckIcon size={50} />};
+
+    const displayEtat = (etat) => obj[etat];
 
     // Retourne le titre d'une tache ainsi que ça description, sa date de création et l'image de son état.
+    const {titre, description, etat, date} = data;
     return(
         <div className='todo'>
             <div className='leftTodo'>
-                <h2>{data.titre}</h2>
+                <h2>{titre}</h2>
                 {/*<p dangerouslySetInnerHTML={{__html: description}}></p>*/}
-                <pre>{data.description}</pre>
+                <pre>{description}</pre>
             </div>
             <div className='rightTodo'>
-                <p>{new Date(data.date).toLocaleDateString("fr")}</p>
-                <div onClick={data.etat === 1 || data.etat === 2 ? () => changeEtat(data) : null}>{displayEtat(data.etat)}</div>
+                <p>{new Date(date).toLocaleDateString("fr")}</p>
+                <div onClick={etat === 1 || etat === 2 ? () => changeEtat(data) : null}>{obj[etat]}</div>
             </div>
         </div>
     );
