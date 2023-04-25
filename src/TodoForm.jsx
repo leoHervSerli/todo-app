@@ -1,6 +1,6 @@
-import {useRef, useState} from "react";
+import {useRef /*, useState*/} from "react";
 
-export default function TodoForm({allTodoData, setAllTodoData, nextId, setNextId, correctDateFormat})
+export default function TodoForm({setAllTodoData, correctDateFormat})
 {
     /* A ne pas faire re update à chaque nouvelle lettre.
 
@@ -25,26 +25,47 @@ export default function TodoForm({allTodoData, setAllTodoData, nextId, setNextId
     const inputDescription = useRef(null);
 
     // Ajoute la tache à la liste de tache si il y a un titre et une description.
-    function handleSubmit(event)
-    {
+    async function handleSubmit(event) {
         event.preventDefault();
         const titre = inputTitre.current.value;
         const description = inputDescription.current.value;
 
-        if(titre !== '' && description !== '')
+        if (titre !== '' && description !== '')
         {
-            const newTodo =
-                {
-                    id: nextId,
-                    titre: titre,
-                    description: description,
-                    etat: 1,
-                    date: correctDateFormat(new Date),
-                };
-            setNextId(nextId + 1);
-            // setAllTodoData([...allTodoData, newTodo]);
-            setAllTodoData((oldList) => [...oldList, newTodo]);
+            const response = await fetch("/insert",
+        {
+                method: "POST",
+                headers:
+                    {
+                    'Accept': 'application/json, text/plain',
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body:
+                    JSON.stringify({
+                        titre: titre,
+                        description: description,
+                        etat: 1,
+                        date: correctDateFormat(new Date),
+                    })
+
+            });
+            const newTodo = await response.json();
+            setAllTodoData((old) => [...old, newTodo]);
         }
+    }
+
+    async function handleResetData()
+    {
+        await fetch("/deleteAll",
+            {
+                method: "DELETE",
+            });
+        const responseData = await fetch("/setDefaults",
+            {
+                method: "POST",
+            });
+        const newData = await responseData.json();
+        setAllTodoData((old) => newData);
     }
 
     // Retourne le formulaire pour ajouter une tache.
@@ -68,6 +89,9 @@ export default function TodoForm({allTodoData, setAllTodoData, nextId, setNextId
                         <input type='submit' value='Créer'/>
                     </div>
                 </form>
+            <div className='resetData'>
+                <button onClick={handleResetData}>ReLoad default Data</button>
+            </div>
         </div>
     );
 }

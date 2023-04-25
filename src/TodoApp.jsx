@@ -14,8 +14,6 @@ export default function TodoApp()
     // Toutes les taches.
     const [allTodoData, setAllTodoData] = useState([]);/*data*/
 
-    // L'id pour la prochaine tache.
-    const [nextId, setNextId] = useState(allTodoData.length + 1);
     // Les etats pour le filtre des etats.
     const [etats, setEtats] = useState({etat1: true, etat2: true, etat3 : true});
 
@@ -51,7 +49,6 @@ export default function TodoApp()
         fetch("http://localhost:5000/data")
             .then(response => response.json())
             .then((usefulData) => {
-                console.log(usefulData);
                 setAllTodoData(usefulData);
             })
             .catch((e) => {
@@ -61,20 +58,36 @@ export default function TodoApp()
     }, []);
     */
 
+    // Fetch avec le server Express
+    // mettre => "proxy": "http://localhost:5000"
+    /*
     useEffect(() =>
     {
         async function getDataFormServer()
         {
             const response = await fetch("/data");
             const data = await response.json();
-            console.log(data);
             setAllTodoData(data);
         }
         getDataFormServer();
         return () => setAllTodoData([]);
     }, []);
+    */
 
+    // Fetch avec le backend qui fait la connection avec la DB.
+    // https://cloud.mongodb.com/ avec google et le mail serli.
 
+    useEffect(() =>
+    {
+        async function getDataFormServer()
+        {
+            const response = await fetch("/all");
+            const data = await response.json();
+            setAllTodoData(data);
+        }
+        getDataFormServer();
+        return () => setAllTodoData([]);
+    }, []);
 
 
     // Pour savoir si une date est entre nos deux dates (filtre date).
@@ -88,13 +101,19 @@ export default function TodoApp()
     }
 
     // Permet de incrementer l'etat d'une tache.
-    function changeEtat(data)
+    async function changeEtat(data)
     {
-        const value = data.etat === 1 || data.etat === 2 ? 1 : 0;
+        const value = data.etat === 1 || data.etat === 2 ? data.etat + 1 : 3;
         setAllTodoData(allTodoData.map(elem =>
         {
-            return elem.id === data.id ? {...elem, etat: data.etat + value} : elem;
+            return elem.id === data.id ? {...elem, etat: value} : elem;
         }));
+        const request = "/updateEtat/" + data.id +  "/" + value;
+        await fetch(request,
+            {
+                method: "PUT",
+            }
+        );
     }
 
     // Transforme une Date en format correct pour les <input type='date' />.
@@ -115,8 +134,7 @@ export default function TodoApp()
     return(
       <div className='todoApp'>
           <div className='leftTodoApp'>
-                <TodoForm allTodoData={allTodoData} setAllTodoData={setAllTodoData} nextId={nextId}
-                          setNextId={setNextId} correctDateFormat={correctDateFormat}/>
+                <TodoForm setAllTodoData={setAllTodoData} correctDateFormat={correctDateFormat}/>
                 <TodoStats numbersOfEtats={numbersOfEtats}/>
           </div>
 
