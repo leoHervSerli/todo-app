@@ -2,7 +2,7 @@ import TodoForm from "./TodoForm";
 import TodoStats from "./TodoStats";
 import TodoFilters from "./TodoFilters";
 import TodoList from "./TodoList";
-//import {data} from "./data";
+import {data} from "./data";
 import {useState, useEffect} from "react";
 
 export default function TodoApp()
@@ -82,8 +82,15 @@ export default function TodoApp()
         async function getDataFormServer()
         {
             const response = await fetch("/all");
-            const data = await response.json();
-            setAllTodoData(data);
+            if(response.status !== 200)
+            {
+                setAllTodoData(data);
+            }
+            else
+            {
+                const datadb = await response.json();
+                setAllTodoData(datadb);
+            }
         }
         getDataFormServer();
         return () => setAllTodoData([]);

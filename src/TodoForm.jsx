@@ -30,42 +30,54 @@ export default function TodoForm({setAllTodoData, correctDateFormat})
         const titre = inputTitre.current.value;
         const description = inputDescription.current.value;
 
-        if (titre !== '' && description !== '')
-        {
+        if(titre !== '' && description !== '') {
             const response = await fetch("/insert",
-        {
-                method: "POST",
-                headers:
-                    {
-                    'Accept': 'application/json, text/plain',
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                body:
-                    JSON.stringify({
-                        titre: titre,
-                        description: description,
-                        etat: 1,
-                        date: correctDateFormat(new Date),
-                    })
+                {
+                    method: "POST",
+                    headers:
+                        {
+                            'Accept': 'application/json, text/plain',
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                    body:
+                        JSON.stringify({
+                            titre: titre,
+                            description: description,
+                            etat: 1,
+                            date: correctDateFormat(new Date),
+                        })
 
-            });
-            const newTodo = await response.json();
-            setAllTodoData((old) => [...old, newTodo]);
+                });
+            if(response.status === 200)
+            {
+                const newTodo = await response.json();
+                setAllTodoData((old) => [...old, newTodo]);
+            }
+            else
+            {
+                console.error("Cannot add a new todo, start of the backEnd needed");
+            }
         }
     }
 
     async function handleResetData()
     {
-        await fetch("/deleteAll",
+        const deleteData = await fetch("/deleteAll",
             {
                 method: "DELETE",
             });
-        const responseData = await fetch("/setDefaults",
+        if(deleteData.status === 200)
+        {
+            const responseData = await fetch("/setDefaults",
+                {
+                    method: "POST",
+                });
+            if(responseData.status === 200)
             {
-                method: "POST",
-            });
-        const newData = await responseData.json();
-        setAllTodoData((old) => newData);
+                const newData = await responseData.json();
+                setAllTodoData((old) => newData);
+            }
+        }
     }
 
     // Retourne le formulaire pour ajouter une tache.
