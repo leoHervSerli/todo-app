@@ -45,8 +45,14 @@ export default function TodoDoughnut({numbersOfEtats})
         },
         responsive: true,
         cutoutPercentage: 90,
-        legend: {
-            display: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                    fontSize: 14
+                }
+            },
         },
         title: {
             display: false,
